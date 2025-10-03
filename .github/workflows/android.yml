@@ -21,12 +21,12 @@ jobs:
 
       - name: Install JS dependencies
         run: |
-          if [ -f yarn.lock ]; then
+          if [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f yarn.lock ]; then
             corepack enable
             corepack prepare yarn@stable --activate
-            yarn install --frozen-lockfile
-          elif [ -f package-lock.json ]; then
-            npm ci
+            yarn install --immutable --immutable-cache
           else
             npm install
           fi
