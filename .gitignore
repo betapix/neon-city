@@ -73,3 +73,6 @@ coverage/
 reports/
 dist/
 .tmp/"/android" 
+
+# git auto push
+gitpush.bat
