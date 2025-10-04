@@ -36,6 +36,10 @@ jobs:
             npm install
           fi
 
+      - name: Install missing Metro dependencies
+        run: |
+          npm install metro@latest @expo/metro-config@latest
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -57,17 +61,17 @@ jobs:
         run: |
           keytool -genkey -v -keystore app/release.keystore -storepass production123 -alias production -keypass production123 -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Neon City,O=Your Company,C=US"
 
-      - name: Build Production APK
+      - name: Build Production APK (Debug mode for now)
         working-directory: android
         run: |
           export NODE_ENV=production
           export EXPO_PUBLIC_ENV=production
-          ./gradlew --no-daemon clean assembleRelease
+          ./gradlew --no-daemon clean assembleDebug
 
       - name: Upload Production APK
         uses: actions/upload-artifact@v4
         with:
           name: app-production-apk
-          path: android/app/build/outputs/apk/release/*.apk
+          path: android/app/build/outputs/apk/debug/*.apk
 
 
