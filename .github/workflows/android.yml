@@ -52,14 +52,28 @@ jobs:
         run: |
           keytool -genkey -v -keystore app/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
-      - name: Build Debug APK
+      - name: Generate production keystore
         working-directory: android
-        run: ./gradlew --no-daemon clean assembleDebug
+        run: |
+          keytool -genkey -v -keystore app/release.keystore -storepass production123 -alias production -keypass production123 -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Neon City,O=Your Company,C=US"
 
-      - name: Upload Debug APK
+      - name: Set environment for production build
+        run: |
+          echo "NODE_ENV=production" >> $GITHUB_ENV
+          echo "EXPO_PUBLIC_ENV=production" >> $GITHUB_ENV
+
+      - name: Build production bundle
+        run: |
+          npx expo export --platform android --output-dir android/app/src/main/assets --clear
+
+      - name: Build Production APK
+        working-directory: android
+        run: ./gradlew --no-daemon clean assembleRelease
+
+      - name: Upload Production APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: android/app/build/outputs/apk/debug/*.apk
+          name: app-production-apk
+          path: android/app/build/outputs/apk/release/*.apk
 
 

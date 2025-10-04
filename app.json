@@ -39,12 +39,6 @@
           "fonts": ["./assets/fonts/"]
         }
       ],
-      [
-        "expo-dev-launcher",
-        {
-          "launchMode": "most-recent"
-        }
-      ]
     ],
     "experiments": {
       "typedRoutes": true,
